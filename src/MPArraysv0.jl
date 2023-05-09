@@ -1,8 +1,8 @@
-module MPArraysv0
+#module MPArraysv0
 
-using LinearAlgebra 
-using SparseArrays
-using SIAMFANLEquations
+#using LinearAlgebra 
+#using SparseArrays
+#using SIAMFANLEquations
 
 #
 # This is MPArraysv0.jl
@@ -82,4 +82,4 @@ include("Solvers/mpgesl2.jl")
 include("Solvers/IRTriangle.jl")
 include("Structs4MP/MPStats.jl")
 
-end # module MPArrays
+#end # module MPArrays

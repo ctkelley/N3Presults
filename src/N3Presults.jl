@@ -7,13 +7,16 @@ Newton's Method in Three Precisions
 """
 module N3Presults
 
-export
-# Functions
 
 using PyPlot
 using LinearAlgebra
+using SparseArrays
 using SIAMFANLEquations
 using SIAMFANLEquations.TestProblems
 using SIAMFANLEquations.Examples
+
+# Functions
+
+include("MPArraysv0.jl")
 
 end #module
