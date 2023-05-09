@@ -1,4 +1,4 @@
-# Newton3P
+# N3Presults
 This Git repo supports my paper __Newton's Method in Three Precisions__
 
 The software is in Julia and I have included 
