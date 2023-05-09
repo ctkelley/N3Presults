@@ -10,8 +10,6 @@ module N3Presults
 export
 # Functions
 
-
-
 using PyPlot
 using LinearAlgebra
 using SIAMFANLEquations
