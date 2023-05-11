@@ -16,7 +16,10 @@ using SIAMFANLEquations.TestProblems
 using SIAMFANLEquations.Examples
 
 # Functions
+export htest1
 
+# Files
 include("MPArraysv0.jl")
+include("H_equation_examples.jl")
 
 end #module
