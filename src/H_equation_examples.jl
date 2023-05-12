@@ -20,11 +20,11 @@ tol=1.e-8
 dohalf=false
 hdata = heqinit(x0, c);
 nout=nsol(heqf!, x0, FV, JV, heqJ!;
-          rtol=tol, atol=tol, pdata = hdata, sham = 1, jfact=lu!)
+          rtol=tol, atol=tol, pdata = hdata, sham = 1, jfact=lu!, maxit=10)
 nout16=nsol(heqf!, x0, FV, JV16, heqJ!;
-          rtol=tol, atol=tol, pdata = hdata, sham = 1, jfact=lu!)
+          rtol=tol, atol=tol, pdata = hdata, sham = 1, jfact=lu!, maxit=10)
 mpnout=nsol(heqf!, x0, FV, JVMP, jheqmp!;
-          rtol=tol, atol=tol, pdata = hdata, sham = 1, jfact=mplu!)
+          rtol=tol, atol=tol, pdata = hdata, sham = 1, jfact=mplu!, maxit=10)
 #
 n32=length(nout.history)
 x32=0:n32-1
