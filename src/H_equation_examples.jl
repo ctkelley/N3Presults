@@ -16,7 +16,7 @@ JV16=zeros(Float16,n,n);
 JVMP=MPArray(JV);
 JVMPD=MPArray(JVD);
 x0=ones(n);
-tol=1.e-14
+tol=1.e-8
 dohalf=false
 hdata = heqinit(x0, c);
 nout=nsol(heqf!, x0, FV, JV, heqJ!;
@@ -34,6 +34,8 @@ lmp=length(mpnout.history)
 xmp=0:lmp-1
 semilogy(x32,nout.history,"k-",xmp,mpnout.history,"k--",
          x16,nout16.history,"k-.")
+legend(["F32","IR32-16","F16"])
+title("Single and half, IR, N=$n, c=$c")
 end
 
 function jheqmp!(JVMP, FV, x, hdata)
