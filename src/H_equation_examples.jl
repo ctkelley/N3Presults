@@ -6,39 +6,46 @@ Julia functions for the examples in
 Newton's Method in Three Precisions
 """
 #
-# H-equation test 1: Float32 Jacobian vs MP(32,16) MPArray
+# H-equation test 1: Float 64 and Float32 Jacobian vs MP(32,16) MPArray
 #
-function htest1(n=32, c=.999; tol=1.e-8)
+function htest1(n=32, c=.999; tol=1.e-8, paper=false)
 maxnl=20
 FV=zeros(n);
+JV64=zeros(n,n);
 JV=zeros(Float32,n,n);
-JVD=zeros(Float64,n,n);
 JV16=zeros(Float16,n,n);
 JVMP=MPArray(JV);
-JVMPD=MPArray(JVD);
+JVMPH=MPHArray(JV);
 x0=ones(n);
 hdata = heqinit(x0, c);
+nout64=nsol(heqf!, x0, FV, JV64, heqJ!;
+          rtol=tol, atol=tol, pdata = hdata, sham = 1, jfact=lu!, maxit=maxnl)
 nout=nsol(heqf!, x0, FV, JV, heqJ!;
           rtol=tol, atol=tol, pdata = hdata, sham = 1, jfact=lu!, maxit=maxnl)
 nout16=nsol(heqf!, x0, FV, JV16, heqJ!;
           rtol=tol, atol=tol, pdata = hdata, sham = 1, jfact=lu!, maxit=maxnl)
 mpnout=nsol(heqf!, x0, FV, JVMP, jheqmp!;
-          rtol=tol, atol=tol, pdata = hdata, sham = 1, jfact=mplu!, maxit=maxnl)
+          rtol=tol, atol=tol, pdata = hdata, sham = 1, 
+          jfact=mplu!, maxit=maxnl)
 #
+n64=length(nout.history)
+x64=0:1:n64-1
 n32=length(nout.history)
 x32=0:1:n32-1
 n16=length(nout16.history)
 x16=0:1:n16-1
 lmp=length(mpnout.history)
 xmp=0:1:lmp-1
-semilogy(x32,nout.history,"k-",xmp,mpnout.history,"k--",
-         x16,nout16.history,"k-.")
+semilogy(x64,nout64.history/nout64.history[1], "k-",
+         x32,nout.history/nout.history[1], "ko",
+         xmp,mpnout.history/mpnout.history[1],"k--",
+         x16,nout16.history/nout16.history[1],"k-.")
 (xmin, xmax, ymin, ymax) = axis()
 axis([0.0, xmax, ymin, ymax])
 itick=ceil(xmax/5.0)
 xticks(0:itick:xmax)
-legend(["F32","IR32-16","F16"])
-title("Single and half, IR, N=$n, c=$c")
+legend(["double", "single","IR32-16","half"])
+paper || title("Two and three precisions, N=$n, c=$c")
 end
 
 function jheqmp!(JVMP, FV, x, hdata)
