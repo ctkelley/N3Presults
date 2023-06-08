@@ -1,11 +1,5 @@
-#module MPArraysv0
-
-#using LinearAlgebra 
-#using SparseArrays
-#using SIAMFANLEquations
-
 #
-# This is MPArraysv0.jl
+# This is MultiPrecisionArraysv0.jl
 # The package has data structures and algorithms to manage several
 # variations on iterative refinement. v0 means that is is for the 
 # paper Newton's Method in Three Precisions

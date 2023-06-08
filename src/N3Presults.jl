@@ -21,7 +21,7 @@ export htest1
 export heq2p
 
 # Files
-include("MPArraysv0.jl")
+include("MultiPrecisionArraysv0.jl")
 include("H_equation_examples.jl")
 include("Two_precision_examples.jl")
 
