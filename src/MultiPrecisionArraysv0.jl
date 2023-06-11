@@ -23,10 +23,10 @@ TP=eltype(MP.AH)
 return TP
 end
 
-#function eltype(MPH::MPHArray)
-#TP = eltype(MPH.AH)
-#return TP
-#end
+function eltype(MPH::MPHArray)
+TP = eltype(MPH.AH)
+return TP
+end
 
 import Base.\
 function \(AF::MPLFact, b; verbose=false, reporting=false)
@@ -44,10 +44,10 @@ xi = mpgesl2(AF,b; verbose=verbose, reporting=reporting)
 return xi
 end
 
-#function \(AF::MPGHFact, b; verbose=false, reporting=false)
-#xi = mpgmir(AF,b; verbose=verbose, reporting=reporting)
-#return xi
-#end
+function \(AF::MPGHFact, b; verbose=false, reporting=false)
+xi = mpgmir(AF,b; verbose=verbose, reporting=reporting)
+return xi
+end
 
 export mplu!
 export mphlu!
