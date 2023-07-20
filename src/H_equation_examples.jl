@@ -10,7 +10,7 @@ Newton's Method in Three Precisions
 # H-equation test 1: Float 64 and Float32 Jacobian vs MP(32,16) MPArray
 #
 function htest1(n=32, c=.999; tol=1.e-8, paper=false)
-maxnl=20
+maxnl=10
 FV=zeros(n);
 JV64=zeros(n,n);
 JV=zeros(Float32,n,n);
@@ -42,9 +42,16 @@ nout16=nsol(heqf!, x0, FV, JV16, heqJ!;
 fname=Fname(c,n,"F16")
 writempdata(fname,nout16.history)
 end
+heavy = false
+if heavy
+mpnout=nsol(heqf!, x0, FV, JVMPH, jheqmp!;
+          rtol=tol, atol=tol, pdata = hdata, sham = 1, 
+          jfact=mphlu!, maxit=maxnl)
+else
 mpnout=nsol(heqf!, x0, FV, JVMP, jheqmp!;
           rtol=tol, atol=tol, pdata = hdata, sham = 1, 
           jfact=mplu!, maxit=maxnl)
+end
 mphnout=nsol(heqf!, x0, FV, JVMPH, jheqmph!;
           rtol=tol, atol=tol, pdata = hdata, sham = 1, 
           jfact=mpglu!, maxit=maxnl)
