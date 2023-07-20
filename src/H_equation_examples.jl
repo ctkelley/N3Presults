@@ -19,29 +19,12 @@ JVMP=MPArray(JV);
 JVMPH=MPHArray(JV);
 x0=ones(n);
 hdata = heqinit(x0, c);
-fileok = true
-for TS in ["F16" "F32" "F64"]
-fname=Fname(c,n,TS)
-fileok = (fileok && isfile(fname))
-end
-fileok = false
-if fileok
-fname=Fname(c,n,"F64")
-hout64=readtmpdata(fname,hout64)
-else
 nout64=nsol(heqf!, x0, FV, JV64, heqJ!;
           rtol=tol, atol=tol, pdata = hdata, sham = 1, jfact=lu!, maxit=maxnl)
-fname=Fname(c,n,"F64")
-writempdata(fname,nout64.history)
 nout=nsol(heqf!, x0, FV, JV, heqJ!;
           rtol=tol, atol=tol, pdata = hdata, sham = 1, jfact=lu!, maxit=maxnl)
-fname=Fname(c,n,"F32")
-writempdata(fname,nout.history)
 nout16=nsol(heqf!, x0, FV, JV16, heqJ!;
           rtol=tol, atol=tol, pdata = hdata, sham = 1, jfact=lu!, maxit=maxnl)
-fname=Fname(c,n,"F16")
-writempdata(fname,nout16.history)
-end
 heavy = false
 if heavy
 mpnout=nsol(heqf!, x0, FV, JVMPH, jheqmp!;
