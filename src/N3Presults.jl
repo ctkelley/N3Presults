@@ -18,7 +18,7 @@ using SIAMFANLEquations.Examples
 
 # Functions
 export htest1
-export heq2p
+#export heq2p
 export store_basics
 export readmpdata
 
@@ -26,7 +26,6 @@ export readmpdata
 # Files
 include("MultiPrecisionArraysv0.jl")
 include("H_equation_examples.jl")
-#include("Two_precision_examples.jl")
 # Tools
 include("Tools/fprintTeX.jl")
 include("Tools/printhist.jl")
