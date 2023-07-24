@@ -37,3 +37,8 @@ To fully understand this material you'll need to understand how ```nsol.jl``` fr
 [notebook](https://github.com/ctkelley/NotebookSIAMFANL).
 
 I manage the coupling of iterative refinement and the nonlinear solver with a data structure ```MPArray```. I am building a package for this, but it will not be done in time for this paper. I've put a preliminary version in file ```src/MultiPrecisionArraysv0.jl``` that works for this repo. It is not completely documented nor have I made any final decsions on the user interface. The package repo is [MultiPrecisionArrays.jl](MultiPrecisionArrays.jl), but I have not registered it or announced it.
+
+This work was partially supported by
+- US Department of Energy grant DE-NA003967 and
+- National Science Foundation Grant DMS-1906446.
+
