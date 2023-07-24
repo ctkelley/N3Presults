@@ -31,3 +31,9 @@ To run the notebook
 - Type ```notebook(;dir=pwd())``` at the julia prompt
 - click on the notebook ```N3Presults.ipynb```
 - The notebook should open, when it does click on ```cell``` and select the ```run all``` option.
+
+To fully understand this material you'll need to understand how ```nsol.jl``` from [SIAMFANLEquations.jl](https://github.com/ctkelley/SIAMFANLEquations.jl). The solver is well documented in the 
+[book](https://my.siam.org/Store/Product/viewproduct/?ProductId=44313635) and the 
+[notebook](https://github.com/ctkelley/NotebookSIAMFANL).
+
+I manage the coupling of iterative refinement and the nonlinear solver with a data structure ```MPArray```. I am building a package for this, but it will not be done in time for this paper. I've put a preliminary version in file ```src/MultiPrecisionArraysv0.jl``` that works for this repo. It is not completely documented nor have I made any final decsions on the user interface. The package repo is [MultiPrecisionArrays.jl](MultiPrecisionArrays.jl), but I have not registered it or announced it.
