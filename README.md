@@ -37,7 +37,7 @@ To run the notebook
 - The notebook should open, when it does click on ```cell``` and select the ```run all``` option.
 
 ## The tricky stuff.
-To fully understand this material you'll need to understand how ```nsol.jl``` from [SIAMFANLEquations.jl](https://github.com/ctkelley/SIAMFANLEquations.jl). The solver is well documented in the 
+To fully understand this material you'll need to understand how to use ```nsol.jl``` from [SIAMFANLEquations.jl](https://github.com/ctkelley/SIAMFANLEquations.jl). The solver is well documented in the 
 [book](https://my.siam.org/Store/Product/viewproduct/?ProductId=44313635) and the 
 [notebook](https://github.com/ctkelley/NotebookSIAMFANL).
 
