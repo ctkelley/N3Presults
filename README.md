@@ -10,6 +10,7 @@ __Use the latest version of Julia with this stuff!!!__
 The software is in Julia and I have included 
   - A Jupyter notebook
   - The codes for the examples in the paper
+  - A [pdf file of the notebook](N3Presults.pdf)
   - A copy of [talk on interprecision transfers](MPArrays_XSDK-MULTIPRECISION_June_15.pdf) for the XSDK-MULTIPRECISION series of seminars
 
 ## Prerequisites
