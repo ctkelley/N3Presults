@@ -1,5 +1,5 @@
-# N3Presults
-This Git repo supports my paper __Newton's Method in Three Precisions__
+# N3Presults: notebook for Newton's Method in Three Precisions
+This Git repo supports my paper 
 
 C. T. Kelley, _Newton's Method in Three Precisions_, 2023
 
@@ -35,7 +35,7 @@ To run the notebook
 - start Julia
 - Type ```notebook(;dir=pwd())``` at the julia prompt
 - click on the notebook ```N3Presults.ipynb```
-- The notebook should open, when it does click on ```cell``` and select the ```run all``` option.
+- The notebook should open. When it does click on ```cell``` and select the ```run all``` option.
 
 ## The tricky stuff.
 To fully understand this material you'll need to understand how to use ```nsol.jl``` from [SIAMFANLEquations.jl](https://github.com/ctkelley/SIAMFANLEquations.jl). The solver is well documented in the 
