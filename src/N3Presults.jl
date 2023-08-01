@@ -15,7 +15,6 @@ using SparseArrays
 using SIAMFANLEquations
 using SIAMFANLEquations.TestProblems
 using SIAMFANLEquations.Examples
-using MultiPrecisionArraysv0
 
 # Functions
 export htest1
@@ -25,7 +24,7 @@ export readmpdata
 
 
 # Files
-#include("MultiPrecisionArraysv0.jl")
+include("MultiPrecisionArraysv0.jl")
 include("H_equation_examples.jl")
 # Tools
 include("Tools/fprintTeX.jl")
