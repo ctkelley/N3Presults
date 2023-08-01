@@ -1,7 +1,7 @@
 # N3Presults: notebook for Newton's Method in Three Precisions
 This Git repo supports my paper 
 
-C. T. Kelley, _Newton's Method in Three Precisions_, 2023
+C. T. Kelley, [_Newton's Method in Three Precisions_](https://arxiv.org/abs/2307.16051), 2023
 
 __Use the latest version of Julia with this stuff!!!__ 
 
@@ -25,7 +25,7 @@ To run this notebook you will need to install these packages
 - SIAMFANLEquations
 - PyPlot
 
-When you install SIAMFANLEquations you will also install many other packages. If you have not installed them already, that could take a bit of time.
+When you install these packages, espcially, SIAMFANLEquations you will also install many other packages. If you have not installed them already, that could take a bit of time.
 
 ## Running the codes
 To run the notebook 
