@@ -10,6 +10,7 @@ module N3Presults
 
 using Printf
 using PyPlot
+#using PythonPlot
 using LinearAlgebra
 using SparseArrays
 using SIAMFANLEquations
