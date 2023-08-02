@@ -1,14 +1,7 @@
-module MultiPrecisionArraysv0
-
-using LinearAlgebra 
-using SparseArrays
-using SIAMFANLEquations
-
 include("Structs4MP/MPLight.jl")
 include("Structs4MP/MPHeavy.jl")
 
 MPIRArray=Union{MPArray,MPHArray}
-
 
 MPFact=Union{MPLFact, MPLEFact, MPHFact}
 
@@ -96,5 +89,3 @@ include("Solvers/mpgmir.jl")
 include("Solvers/mpgesl2.jl")
 include("Solvers/IRTriangle.jl")
 include("Structs4MP/MPStats.jl")
-
-end # module MPArrays
