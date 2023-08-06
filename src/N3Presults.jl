@@ -16,6 +16,7 @@ using SparseArrays
 using SIAMFANLEquations
 using SIAMFANLEquations.TestProblems
 using SIAMFANLEquations.Examples
+using Polyester
 
 # Functions
 export htest1
