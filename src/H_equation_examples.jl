@@ -24,7 +24,7 @@ nout64=nsol(heqf!, x0, FV, JV64, heqJ!;
 nout=nsol(heqf!, x0, FV, JV, heqJ!;
           rtol=tol, atol=tol, pdata = hdata, sham = 1, jfact=lu!, maxit=maxnl)
 nout16=nsol(heqf!, x0, FV, JV16, heqJ!;
-          rtol=tol, atol=tol, pdata = hdata, sham = 1, jfact=lu!, maxit=maxnl)
+          rtol=tol, atol=tol, pdata = hdata, sham = 1, jfact=hlu!, maxit=maxnl)
 heavy = false
 if heavy
 mpnout=nsol(heqf!, x0, FV, JVMPH, jheqmp!;
