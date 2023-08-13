@@ -20,7 +20,7 @@ function fprintTeX(headers, formats, data)
     for i = 1:mc-1
         @printf("%9s &", headers[i])
     end
-    @printf("%9s \\\\ \n" , headers[mc])
+    @printf("%9s \\\\ \n", headers[mc])
     @printf("\\hline \n")
     #
     # I am not sure why @printf needs this, but it does.
