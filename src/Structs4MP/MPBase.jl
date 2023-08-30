@@ -1,19 +1,19 @@
 #
-# This file is MPLight.jl 
+# This file is MPBase.jl 
 # Plain vanilla iterative refinement. The structures store
-# High and low precision arrays
-# Factorizations of these arrays
+# High and low precision arrays and factorizations of these arrays
 #
-
 struct MPArray{TH<:AbstractFloat,TL<:AbstractFloat}
     AH::Array{TH,2}
     AL::Array{TL,2}
+    residual::Vector{TH}
 end
 
 struct MPLFact{TH<:AbstractFloat,TL<:AbstractFloat,TF<:Factorization}
     AH::Array{TH,2}
     AL::Array{TL,2}
     AF::TF
+    residual::Vector{TH}
 end
 
 #
@@ -25,6 +25,7 @@ end
 struct MPEArray{TH<:AbstractFloat,TL<:AbstractFloat}
     AH::Array{TH,2}
     AL::Array{TL,2}
+    residual::Vector{TH}
 end
 
 
@@ -32,31 +33,24 @@ struct MPLEFact{TH<:AbstractFloat,TL<:AbstractFloat,TF<:Factorization}
     AH::Array{TH,2}
     AL::Array{TL,2}
     AF::TF
+    residual::Vector{TH}
 end
 
-MPLArray = Union{MPArray,MPEArray}
 
-
-#
-# The constructors for the multi-precision arrays
-# 
-
-function MPArray(AH::Array{Float32,2}; TL = Float16)
-    AL = TL.(AH)
-    MPA = MPArray(AH, AL)
-end
-
-function MPArray(AH::Array{Float64,2}; TL = Float32)
-    AL = TL.(AH)
-    MPA = MPArray(AH, AL)
-end
+#function MPArray(AH::Array{Float32,2}; TL = Float16, onthefly=false)
+#    AL = TL.(AH)
+#    (m,n)=size(AH); res=ones(eltype(AH),n)
+#    onthefly ?  MPA = MPEArray(AH, AL, res) : MPA = MPArray(AH, AL, res)
+#end
 
 function MPEArray(AH::Array{Float32,2}; TL = Float16)
     AL = TL.(AH)
-    MPA = MPEArray(AH, AL)
+    (m,n)=size(AH); res=ones(eltype(AH),n)
+    MPA = MPEArray(AH, AL, res)
 end
 
 function MPEArray(AH::Array{Float64,2}; TL = Float32)
+    (m,n)=size(AH); res=ones(eltype(AH),n)
     AL = TL.(AH)
-    MPA = MPEArray(AH, AL)
+    MPA = MPEArray(AH, AL, res)
 end

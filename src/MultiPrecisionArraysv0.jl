@@ -1,18 +1,17 @@
 #
-# This is MPArrays.jl
+# This is MultiPrecisionArrays.jl
 # The package has data structures and algorithms to manage several
 # variations on iterative refinement.
 #
 
-include("Structs4MP/MPLight.jl")
+include("Structs4MP/MPBase.jl")
+include("Structs4MP/MPArray.jl")
 include("Structs4MP/MPHeavy.jl")
-include("Factorizations/Factorizations.jl")
 include("Factorizations/hlu!.jl")
 include("Factorizations/mplu!.jl")
+include("Factorizations/mpglu!.jl")
 
-MPIRArray = Union{MPArray,MPHArray}
-
-#MPLArray = Union{MPArray,MPEArray}
+#MPIRArray = Union{MPArray,MPHArray}
 
 MPFact = Union{MPLFact,MPLEFact,MPHFact}
 
@@ -21,37 +20,32 @@ on_the_fly(x::MPEArray) = true
 on_the_fly(x::MPLFact) = false
 on_the_fly(x::MPLEFact) = true
 on_the_fly(x::MPHFact) = true
+is_heavy(x::MPHFact) = true
+is_heavy(x::MPLFact) = false
+is_heavy(x::MPLEFact) = false
+
 
 MPLFacts = Union{MPLFact,MPLEFact}
 
 import Base.eltype
-function eltype(MP::MPArray)
+
+function eltype(MP::Union{MPArray,MPHArray,MPEArray})
     TP = eltype(MP.AH)
     return TP
 end
 
-function eltype(MPH::MPHArray)
-    TP = eltype(MPH.AH)
-    return TP
-end
+#function eltype(MPH::MPHArray)
+#    TP = eltype(MPH.AH)
+#    return TP
+#end
 
 import Base.\
-function \(AF::MPLFact, b; verbose = false, reporting = false)
+function \(AF::MPFact, b; verbose = false, reporting = false)
     xi = mpgesl2(AF, b; verbose = verbose, reporting = reporting)
     return xi
 end
 
-function \(AF::MPLEFact, b; verbose = false, reporting = false)
-    xi = mpgesl2(AF, b; verbose = verbose, reporting = reporting)
-    return xi
-end
-
-function \(AF::MPHFact, b; verbose = false, reporting = false)
-    xi = mpgesl2(AF, b; verbose = verbose, reporting = reporting)
-    return xi
-end
-
-function \(AF::MPGHFact, b; verbose = false, reporting = false)
+function \(AF::MPGHFact, b; verbose = false, reporting = false) 
     xi = mpgmir(AF, b; verbose = verbose, reporting = reporting)
     return xi
 end
@@ -87,19 +81,23 @@ export mpgmir
 #
 # Each MPArray data structure comes with a structure to store a factorization.
 # The differences are whether one does on-the-fly interprecision transfers
-# of not. For plain IR, I think the answer is clear (NO) and you should
-# MPArray and MPLFact instead of MPEArray and MPLEFact. The factorization
-# structures shoule be invisible to most people and I may stop exporting
-# them. 
+# of not. For plain IR with high=double and low=single, I think the answer 
+# is clear (NO) and you should use MPArray and MPLFact instead of MPEArray 
+# and MPLEFact. If low precision is half, it's not so clear and the 
+# documentation has an example to illustrate that.
 #
-# Ffor IR-GMRES, it's more subtle. The cost of Heavy IR with MPHArray
-# and MPGHFact is an extra
-# high precision matrix. If you can afford the storage and communication
-# burden, it's a good thing to do. If you can't, on-the-fly is your
-# only option.
+# The factorization structures should be invisible to most people 
+# and I may stop exporting them. 
+#
+# For IR-GMRES, it's more subtle.  The cost of Heavy IR with MPHArray
+# and MPGHFact is an extra high precision matrix. If you can afford the 
+# storage and communication burden, it's a reasonable thing to do. 
+# If you can't, on-the-fly is your only option. The differences in time
+# become less significant as the problem size gets large and the O(N^2)
+# interprecision transfer cost is completely dominated by the O(N^3) 
+# factorization cost. 
 #
 export MPArray
-export MPLArray
 export MPHArray
 #
 #

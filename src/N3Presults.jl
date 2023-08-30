@@ -10,14 +10,13 @@ module N3Presults
 
 using Printf
 using PyPlot
-#using PythonPlot
 using LinearAlgebra
 using SparseArrays
 using SIAMFANLEquations
 using SIAMFANLEquations.TestProblems
 using SIAMFANLEquations.Examples
-#using Polyester
-using MultiPrecisionArrays
+using Polyester
+#using MultiPrecisionArrays
 
 # Functions
 export htest1
@@ -27,7 +26,7 @@ export readmpdata
 
 
 # Files
-#include("MultiPrecisionArraysv0.jl")
+include("MultiPrecisionArraysv0.jl")
 include("H_equation_examples.jl")
 # Tools
 include("Tools/fprintTeX.jl")

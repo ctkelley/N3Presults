@@ -5,7 +5,8 @@ Use a multi-precision factorization to solve a linear system with
 plain vanilla iterative refinement.
 """
 function mpgesl2(AF::MPFact, b; reporting = false, verbose = true)
-    # # What kind of problem are we dealing with?
+    #
+    # What kind of problem are we dealing with?
     #
     mpdebug = false
     normtype = Inf
@@ -13,16 +14,17 @@ function mpgesl2(AF::MPFact, b; reporting = false, verbose = true)
     MPStats = getStats(AF)
     TL = MPStats.TL
     TH = MPStats.TH
+    r = AF.residual
     #
     # TFact is the precision of the factors
     #
     TFact = MPStats.TFact
     #
     # Are the precisions consistent? If not, I have a bug somewhere.
-    # If so, set the completely arbitrary tolerances
+    # Otherwise, set the tolerance on the iteration to 100*eps
     #
     (TH == TB) || error("inconsistent precisions")
-    (TH == Float64) ? tolf = 1.e-13 : tolf = 1.e-6
+    tolf = eps(TH)*TH.(100.0)
     #
     # Keep the records and accumulate the statistics. 
     #
@@ -40,28 +42,24 @@ function mpgesl2(AF::MPFact, b; reporting = false, verbose = true)
     AFS = AF.AF
     bS = TFact.(bsc)
     #
-    # Initialize the iteration. I am still thinking about how I want
-    # to do this. For now I initialize to zero.
+    # Initialize the iteration. I initialize to zero. That makes the
+    # iteration count the same as the high precision matvec and the 
+    # triangular sovles
     #
     x = zeros(TB, size(b))
-    #    if (typeof(AF) == MPGFact)
-    #        x = zeros(size(b))
-    #    else
-    #        x = zeros(size(b))
-    #    end
     #
     # Initial residual
     #
-    oneb = TB(1.0)
-    r = copy(x)
-    mul!(r, AD, x)
-    r .*= -oneb
-    axpy!(oneb, bsc, r)
+#    r = copy(b)
+    r .= b
     tol = tolf * bnrm
     rs = bS
+#
+#
     rhist = Vector{Float64}()
     rnrm = norm(r, normtype)
     rnrmx = rnrm * TB(1.1)
+    oneb = TB(1.0)
     itc = 0
     #
     # Put initial residual norm into the history and iterate.
@@ -95,7 +93,8 @@ function mpgesl2(AF::MPFact, b; reporting = false, verbose = true)
         #
         # If the residual norm increased, complain.
         #
-        (rnrm >= rnrmx) && println("IR Norm increased: $rnrm, $rnrmx, $tol")
+        complain_resid = (rnrm >= rnrmx) && (rnrm > 1.e3 * tol)
+        complain_resid && println("IR Norm increased: $rnrm, $rnrmx, $tol")
     end
     verbose && println("Residual history = $rhist")
     if reporting
@@ -105,18 +104,15 @@ function mpgesl2(AF::MPFact, b; reporting = false, verbose = true)
     end
 end
 
-function getTL(AF::MPLFacts)
+function getTL(AF::MPFact)
     TL = eltype(AF.AL)
-    TFact = eltype(AF.AL)
-    return (TL, TFact)
-end
-
-function getTL(AF::MPHFact)
-    TL = eltype(AF.AL)
+    if is_heavy(AF)
     TFact = eltype(AF.AStore)
+    else
+    TFact = eltype(AF.AL)
+    end
     return (TL, TFact)
 end
-
 
 function getStats(AF)
     TH = eltype(AF.AH)
