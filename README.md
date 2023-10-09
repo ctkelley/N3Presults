@@ -3,7 +3,7 @@ This Git repo supports my paper
 
 C. T. Kelley, [_Newton's Method in Three Precisions_](https://arxiv.org/abs/2307.16051), 2023
 
-__Use the latest release of Julia (1.9.2) with this stuff!!!__ 
+__Use the latest release of Julia (1.9.3) with this stuff!!!__ 
 
 ## What's here
 
