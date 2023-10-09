@@ -1,13 +1,14 @@
 """
-mpgmir(AF::MPGHFact, b; reporting=false, verbose=true, mpdebug=false)
+mpgmir(AF::MPGFact, b; reporting=false, verbose=false, mpdebug=false)
 
-Prototype GMRES-IR solver
+GMRES-IR solver 
 """
-function mpgmir(AF::MPGHFact, b; reporting = false, verbose = false, mpdebug = false)
+function mpgmir(AF::MPGFact, b; reporting = false, 
+                verbose = false, mpdebug = false)
     #
-    normtype = Inf
+    normtype = 2
     TB = eltype(b)
-    irtol = (TB == Float64) ? 1.e-14 : 1.e-7
+    tolf = TB(10.0)*eps(TB)
     n = length(b)
     onetb = TB(1.0)
     bsc = copy(b)
@@ -19,22 +20,27 @@ function mpgmir(AF::MPGHFact, b; reporting = false, verbose = false, mpdebug = f
     #
     # Initialize GMRES-IR
     #
-    r = copy(b)
-#    mul!(r, AD, x)
-#    r .*= -onetb
-#    axpy!(onetb, bsc, r)
+    r = AF.residual
+    r .= b
+#    r = copy(b)
     rnrm = norm(r, normtype)
-    rnrmx = rnrm * TB(1.1)
+    rnrmx = rnrm * TB(2.0)
     rhist = Vector{TB}()
+    khist = Vector{Int64}()
     push!(rhist, rnrm)
-    eta = TB(1.e-6)
+#    eta = TB(1.e-8)
+    eta = tolf
     #
     # GMRES-IR loop
     #
     itc = 0
-    VF = zeros(TB, n, 80)
+    VF=AF.VStore
     normdec = true
-    while (rnrm > irtol * bnorm) && (itc < 10) && normdec
+#    kl_store=kstore(n,"gmres")
+    kl_store = AF.KStore
+    atvd=copy(r)
+    MP_Data = (MPF = AF, atv = atvd)
+    while (rnrm > tolf * bnorm) && ( rnrm <= .99 * rnrmx )
         x0 = zeros(TB, n)
         #
         # Scale the residual 
@@ -43,10 +49,12 @@ function mpgmir(AF::MPGHFact, b; reporting = false, verbose = false, mpdebug = f
         #
         # Solve the correction equation with GMRES
         #
-        kout = kl_gmres(x0, r, MPhatv, VF, eta, MPhptv; pdata = AF, side = "left")
+        kout = kl_gmres(x0, r, MPhatv, VF, eta, MPhptv; 
+               pdata = MP_Data, side = "left", kl_store=kl_store)
         #
         # Make some noise
         #
+        push!(khist,length(kout.reshist))
         itcp1 = itc + 1
         winner = kout.idid ? " GMRES converged" : " GMRES failed"
         verbose && (println(
@@ -75,7 +83,7 @@ function mpgmir(AF::MPGHFact, b; reporting = false, verbose = false, mpdebug = f
         rnrm = norm(r, normtype)
         itc += 1
         push!(rhist, rnrm)
-        tol = irtol * bnorm
+        tol = tolf * bnorm
         mpdebug && println("Iteration $itc: rnorm = $rnrm, tol = $tol")
         #
         # If the residual norm increased, complain.
@@ -87,18 +95,30 @@ function mpgmir(AF::MPGHFact, b; reporting = false, verbose = false, mpdebug = f
     if reporting
         TL = eltype(AF.AL)
         TFact = eltype(AF.AL)
-        return (rhist = rhist, sol = x, TH = TB, TL = TL, TFact = TFact)
+        return (rhist = rhist, khist = khist,
+               sol = x, TH = TB, TL = TL, TFact = TFact)
     else
         return x
     end
 end
 
-function MPhatv(x, MPHF::MPGHFact)
-    atv = MPHF.AH * x
+#function MPhatv(x, MPF::MPGFact)
+function MPhatv(x, pdata)
+#    atv = MPF.AH * x
+    atv = pdata.atv
+    mul!(atv, pdata.MPF.AH, x)
+#    atv = pdata.MPF.AH * x
     return atv
 end
 
-function MPhptv(x, MPHF::MPGHFact)
-    ptv = MPHF.AF \ x
-    return ptv
+function MPhptv(x, pdata)
+#function MPhptv(x, MPF::MPGFact)
+#    ptv = MPF.AF \ x
+#    ptv = pdata.ptv
+#    ptv .= x
+     ldiv!(pdata.MPF.AF, x)
+#     ldiv!(pdata.MPF.AF, ptv)
+#    ptv .= pdata.MPF.AF \ x
+#    return ptv
+    return x
 end

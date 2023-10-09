@@ -7,29 +7,25 @@
 include("Structs4MP/MPBase.jl")
 include("Structs4MP/MPArray.jl")
 include("Structs4MP/MPHeavy.jl")
-include("Factorizations/hlu!.jl")
-include("Factorizations/mplu!.jl")
-include("Factorizations/mpglu!.jl")
+
+MPFact = Union{MPLFact,MPHFact}
+MPLFacts = Union{MPLFact}
+MPGFact = Union{MPGEFact, MPGHFact}
+
+export MPGFact
 
 #MPIRArray = Union{MPArray,MPHArray}
 
-MPFact = Union{MPLFact,MPLEFact,MPHFact}
 
-on_the_fly(x::MPArray) = false
-on_the_fly(x::MPEArray) = true
-on_the_fly(x::MPLFact) = false
-on_the_fly(x::MPLEFact) = true
-on_the_fly(x::MPHFact) = true
 is_heavy(x::MPHFact) = true
 is_heavy(x::MPLFact) = false
-is_heavy(x::MPLEFact) = false
 
 
-MPLFacts = Union{MPLFact,MPLEFact}
+
 
 import Base.eltype
 
-function eltype(MP::Union{MPArray,MPHArray,MPEArray})
+function eltype(MP::Union{MPArray,MPHArray})
     TP = eltype(MP.AH)
     return TP
 end
@@ -41,13 +37,18 @@ end
 
 import Base.\
 function \(AF::MPFact, b; verbose = false, reporting = false)
-    xi = mpgesl2(AF, b; verbose = verbose, reporting = reporting)
+    xi = mpgeslir(AF, b; verbose = verbose, reporting = reporting)
     return xi
 end
 
-function \(AF::MPGHFact, b; verbose = false, reporting = false) 
-    xi = mpgmir(AF, b; verbose = verbose, reporting = reporting)
+function \(AF::MPGFact, b; verbose = false, reporting = false, mpdebug=false) 
+    xi = mpgmir(AF, b; verbose = verbose, reporting = reporting, mpdebug=mpdebug)
     return xi
+end
+
+function \(MPA::Union{MPArray}, b; verbose=false, reporting=false)
+          xi = mpgeslir(MPA, b; verbose = verbose, reporting = reporting)
+          return xi
 end
 
 #
@@ -66,23 +67,25 @@ export hlu
 # them to nonlinear solvers and eigen solvers.
 #
 export mplu!
+export mplu
 export mphlu!
 export mpglu!
 export mpqr!
 export mpcholesky!
 #
-# The solvers are mpgesl2 (iterative refinement) and mpgmir (IR-GMRES).
+# The solvers are mpgeslir (iterative refinement) and mpgmir (IR-GMRES).
 # I'm not working on more than that right now. I have overloaded
 # \ with these so you should not have to call them directly unless
 # you are looking at iteration statistics
 #
-export mpgesl2
+export mpgeslir
 export mpgmir
 #
 # Each MPArray data structure comes with a structure to store a factorization.
 # The differences are whether one does on-the-fly interprecision transfers
 # of not. For plain IR with high=double and low=single, I think the answer 
-# is clear (NO) and you should use MPArray and MPLFact instead of MPEArray 
+# is clear (NO) and you should use MPArray with onthefly = false 
+# (the default).
 # and MPLEFact. If low precision is half, it's not so clear and the 
 # documentation has an example to illustrate that.
 #
@@ -104,13 +107,13 @@ export MPHArray
 #
 export MPLFact
 export MPGHFact
+export MPFact
 #
 #
 #
-export MPEArray
+#export MPEArray
 export MPFArray
 export MPHFact
-export MPLEFact
 export MPhatv
 export MPhptv
 #
@@ -122,6 +125,9 @@ export MPGStats
 export MPIRStats
 
 include("Solvers/mpgmir.jl")
-include("Solvers/mpgesl2.jl")
+include("Solvers/mpgeslir.jl")
 include("Solvers/IRTriangle.jl")
 include("Structs4MP/MPStats.jl")
+include("Factorizations/hlu!.jl")
+include("Factorizations/mplu!.jl")
+include("Factorizations/mpglu!.jl")
