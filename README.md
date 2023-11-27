@@ -1,7 +1,7 @@
 # N3Presults: notebook for Newton's Method in Three Precisions
 This Git repo supports my paper 
 
-C. T. Kelley, [_Newton's Method in Three Precisions_](https://arxiv.org/abs/2307.16051), 2023
+C. T. Kelley, [_Newton's Method in Three Precisions_](https://arxiv.org/abs/2307.16051), 2023. Pacific Journal of Optimization, to appear.
 
 __Use the latest release of Julia (1.9.3) with this stuff!!!__ 
 
@@ -43,7 +43,7 @@ To fully understand this material you'll need to understand how to use ```nsol.j
 [book](https://my.siam.org/Store/Product/viewproduct/?ProductId=44313635) and the 
 [notebook](https://github.com/ctkelley/NotebookSIAMFANL).
 
-I manage the coupling of iterative refinement and the nonlinear solver with a data structure ```MPArray```. I am building a package for this, but it will not be done in time for this paper. I've put a preliminary version in file ```src/MultiPrecisionArraysv0.jl``` that works for this repo. It is not completely documented nor have I made any final decsions on the user interface. The package repo is [MultiPrecisionArrays.jl](https://github.com/ctkelley/MultiPrecisionArrays.jl), but I have not registered it or announced it
+I manage the coupling of iterative refinement and the nonlinear solver with a data structure ```MPArray```. I am building a package for this, but it will not be done in time for this paper. I've put a preliminary version in file ```src/MultiPrecisionArraysv0.jl``` that works for this repo. It is not completely documented nor have I made any final decsions on the user interface. The package repo is [MultiPrecisionArrays.jl](https://github.com/ctkelley/MultiPrecisionArrays.jl).
 
 
 ## Funding
