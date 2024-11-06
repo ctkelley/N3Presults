@@ -1,7 +1,7 @@
 # N3Presults: notebook for Newton's Method in Three Precisions
 This Git repo supports my paper 
 
-C. T. Kelley, [_Newton's Method in Three Precisions_](https://arxiv.org/abs/2307.16051), 2023. Pacific Journal of Optimization, to appear.
+C. T. Kelley, [_Newton's Method in Three Precisions_](https://arxiv.org/abs/2307.16051), 2023. Pacific Journal of Optimization, vol 20, 2024, pp 461-474.
 
 __Use the latest release of Julia (1.9.3) with this stuff!!!__ 
 
